@@ -9,8 +9,6 @@ Start the VM if it isn’t running and connect using SSH.
 
 ### Step 2
 
-NEED TO CLONE THE REPO AS IT HAS TEST DATA - TEST THIS AND THE REST OF THE STEPS
-
 Clone the repository for lesson 3 and change to the lab directory.
 
 `git clone https://github.com/simplilearn-devops/devops-lesson-3.git`  
@@ -105,43 +103,9 @@ Examine the database tables in the database by selecting the first 10 rows from 
 
 `mysql> show tables;`  
 
-Observe the following output
-
-`+----------------------+  
-| Tables_in_student    |  
-+----------------------+  
-| current_dept_emp     |  
-| departments          |  
-| dept_emp             |  
-| dept_emp_latest_date |  
-| dept_manager         |  
-| employees            |  
-| salaries             |  
-| titles               |  
-+----------------------+  
-8 rows in set (0.00 sec)`  
-
 Get the first 10 records from the current employee department table.
 
 `mysql> select * from current_dept_emp limit 10;`  
-
-Observe the following output:
-
-`+--------+---------+------------+------------+  
-| emp_no | dept_no | from_date  | to_date    |  
-+--------+---------+------------+------------+  
-|  10001 | d005    | 1986-06-26 | 9999-01-01 |  
-|  10002 | d007    | 1996-08-03 | 9999-01-01 |  
-|  10003 | d004    | 1995-12-03 | 9999-01-01 |  
-|  10004 | d004    | 1986-12-01 | 9999-01-01 |  
-|  10005 | d003    | 1989-09-12 | 9999-01-01 |  
-|  10006 | d005    | 1990-08-05 | 9999-01-01 |  
-|  10007 | d008    | 1989-02-10 | 9999-01-01 |  
-|  10008 | d005    | 1998-03-11 | 2000-07-31 |  
-|  10009 | d006    | 1985-02-18 | 9999-01-01 |  
-|  10010 | d006    | 2000-06-26 | 9999-01-01 |  
-+--------+---------+------------+------------+  
-10 rows in set (0.59 sec)`  
 
 Write queries to observe the output to gain some familiarity with the data
 
@@ -149,140 +113,33 @@ Get the first 10 departments.
 
 `mysql> select * from departments limit 10;`  
 
-`+---------+--------------------+  
-| dept_no | dept_name          |  
-+---------+--------------------+  
-| d009    | Customer Service   |  
-| d005    | Development        |  
-| d002    | Finance            |  
-| d003    | Human Resources    |  
-| d001    | Marketing          |  
-| d004    | Production         |  
-| d006    | Quality Management |  
-| d008    | Research           |  
-| d007    | Sales              |  
-+---------+--------------------+  
-9 rows in set (0.00 sec)`  
-
 Get the first 10 records from the employee department table.
 
 `mysql> select * from dept_emp limit 10;`  
 
-`+--------+---------+------------+------------+  
-| emp_no | dept_no | from_date  | to_date    |  
-+--------+---------+------------+------------+  
-|  10001 | d005    | 1986-06-26 | 9999-01-01 |  
-|  10002 | d007    | 1996-08-03 | 9999-01-01 |  
-|  10003 | d004    | 1995-12-03 | 9999-01-01 |  
-|  10004 | d004    | 1986-12-01 | 9999-01-01 |  
-|  10005 | d003    | 1989-09-12 | 9999-01-01 |  
-|  10006 | d005    | 1990-08-05 | 9999-01-01 |  
-|  10007 | d008    | 1989-02-10 | 9999-01-01 |  
-|  10008 | d005    | 1998-03-11 | 2000-07-31 |  
-|  10009 | d006    | 1985-02-18 | 9999-01-01 |  
-|  10010 | d004    | 1996-11-24 | 2000-06-26 |  
-+--------+---------+------------+------------+  
-10 rows in set (0.01 sec)`  
 
 Get the first 10 records from the employee date table.
 
 `mysql> select * from dept_emp_latest_date limit 10;`  
 
-`+--------+------------+------------+  
-| emp_no | from_date  | to_date    |  
-+--------+------------+------------+  
-|  10001 | 1986-06-26 | 9999-01-01 |  
-|  10002 | 1996-08-03 | 9999-01-01 |  
-|  10003 | 1995-12-03 | 9999-01-01 |  
-|  10004 | 1986-12-01 | 9999-01-01 |  
-|  10005 | 1989-09-12 | 9999-01-01 |  
-|  10006 | 1990-08-05 | 9999-01-01 |  
-|  10007 | 1989-02-10 | 9999-01-01 |  
-|  10008 | 1998-03-11 | 2000-07-31 |  
-|  10009 | 1985-02-18 | 9999-01-01 |  
-|  10010 | 2000-06-26 | 9999-01-01 |  
-+--------+------------+------------+  
-10 rows in set (0.59 sec)`  
 
 Get the first 10 records from the department manager table.
 
 `mysql> select * from dept_manager limit 10;`  
 
-`+--------+---------+------------+------------+  
-| emp_no | dept_no | from_date  | to_date    |  
-+--------+---------+------------+------------+  
-| 110022 | d001    | 1985-01-01 | 1991-10-01 |  
-| 110039 | d001    | 1991-10-01 | 9999-01-01 |  
-| 110085 | d002    | 1985-01-01 | 1989-12-17 |  
-| 110114 | d002    | 1989-12-17 | 9999-01-01 |  
-| 110183 | d003    | 1985-01-01 | 1992-03-21 |  
-| 110228 | d003    | 1992-03-21 | 9999-01-01 |  
-| 110303 | d004    | 1985-01-01 | 1988-09-09 |  
-| 110344 | d004    | 1988-09-09 | 1992-08-02 |  
-| 110386 | d004    | 1992-08-02 | 1996-08-30 |  
-| 110420 | d004    | 1996-08-30 | 9999-01-01 |  
-+--------+---------+------------+------------+  
-10 rows in set (0.00 sec)`  
 
 Get the first 10 records from the employee table.
 
 `mysql> select * from employees limit 10;`  
 
-`+--------+------------+------------+-----------+--------+------------+  
-| emp_no | birth_date | first_name | last_name | gender | hire_date  |  
-+--------+------------+------------+-----------+--------+------------+  
-|  10001 | 1953-09-02 | Georgi     | Facello   | M      | 1986-06-26 |  
-|  10002 | 1964-06-02 | Bezalel    | Simmel    | F      | 1985-11-21 |  
-|  10003 | 1959-12-03 | Parto      | Bamford   | M      | 1986-08-28 |  
-|  10004 | 1954-05-01 | Chirstian  | Koblick   | M      | 1986-12-01 |  
-|  10005 | 1955-01-21 | Kyoichi    | Maliniak  | M      | 1989-09-12 |  
-|  10006 | 1953-04-20 | Anneke     | Preusig   | F      | 1989-06-02 |  
-|  10007 | 1957-05-23 | Tzvetan    | Zielinski | F      | 1989-02-10 |  
-|  10008 | 1958-02-19 | Saniya     | Kalloufi  | M      | 1994-09-15 |  
-|  10009 | 1952-04-19 | Sumant     | Peac      | F      | 1985-02-18 |  
-|  10010 | 1963-06-01 | Duangkaew  | Piveteau  | F      | 1989-08-24 |  
-+--------+------------+------------+-----------+--------+------------+  
-10 rows in set (0.00 sec)`  
-
-Get the first 10 records from the salary table.
+1Get the first 10 records from the salary table.
 
 `mysql> select * from salaries limit 10;`  
-
-`+--------+--------+------------+------------+  
-| emp_no | salary | from_date  | to_date    |  
-+--------+--------+------------+------------+  
-|  10001 |  60117 | 1986-06-26 | 1987-06-26 |  
-|  10001 |  62102 | 1987-06-26 | 1988-06-25 |  
-|  10001 |  66074 | 1988-06-25 | 1989-06-25 |  
-|  10001 |  66596 | 1989-06-25 | 1990-06-25 |  
-|  10001 |  66961 | 1990-06-25 | 1991-06-25 |  
-|  10001 |  71046 | 1991-06-25 | 1992-06-24 |  
-|  10001 |  74333 | 1992-06-24 | 1993-06-24 |  
-|  10001 |  75286 | 1993-06-24 | 1994-06-24 |  
-|  10001 |  75994 | 1994-06-24 | 1995-06-24 |  
-|  10001 |  76884 | 1995-06-24 | 1996-06-23 |  
-+--------+--------+------------+------------+  
-10 rows in set (0.00 sec)`  
 
 Get the first 10 records from the titles table.
 
 `mysql> select * from titles limit 10;`  
 
-`+--------+-----------------+------------+------------+  
-| emp_no | title           | from_date  | to_date    |  
-+--------+-----------------+------------+------------+  
-|  10001 | Senior Engineer | 1986-06-26 | 9999-01-01 |  
-|  10002 | Staff           | 1996-08-03 | 9999-01-01 |  
-|  10003 | Senior Engineer | 1995-12-03 | 9999-01-01 |  
-|  10004 | Engineer        | 1986-12-01 | 1995-12-01 |  
-|  10004 | Senior Engineer | 1995-12-01 | 9999-01-01 |  
-|  10005 | Senior Staff    | 1996-09-12 | 9999-01-01 |  
-|  10005 | Staff           | 1989-09-12 | 1996-09-12 |  
-|  10006 | Senior Engineer | 1990-08-05 | 9999-01-01 |  
-|  10007 | Senior Staff    | 1996-02-11 | 9999-01-01 |  
-|  10007 | Staff           | 1989-02-10 | 1996-02-11 |  
-+--------+-----------------+------------+------------+  
-10 rows in set (0.00 sec)`  
 
 ### Step 4
 
