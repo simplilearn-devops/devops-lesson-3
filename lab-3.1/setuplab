@@ -1,0 +1,10 @@
+# !/bin/bash
+# 
+# File: setuplab
+#
+# Purpose: do initial steps to set up lab
+
+docker volume create --name mysql_data
+docker pull mysql:5.7
+./runserver_first
+./runserver
