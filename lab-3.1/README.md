@@ -1,4 +1,4 @@
-# Exercise 3.1 - Relaional Database
+# Exercise 3.1 - Relational Database
 
 Create a relational database container and access the database.
 
