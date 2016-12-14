@@ -1,0 +1,44 @@
+<project name="Astronomy" 
+         default="sonar" 
+         basedir="." 
+         xmlns:jacoco="antlib:org.jacoco.ant"
+         xmlns:sonar="antlib:org.sonar.ant">
+         
+    <path id="classpath">
+        <pathelement location="bin"/>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    
+    <property name="sonar.jdbc.username" value="sonar"/>
+    <property name="sonar.jdbc.password" value="sonar"/>
+    <!-- property name="sonar.jdbc.url" value="jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = XE)))"/ -->
+    <property name="sonar.jdbc.url" value="jdbc:h2:tcp://localhost:9092/sonar"/>
+    <property name="sonar.projectKey" value="org.codehaus.sonar:Astronomy" />
+    <property name="sonar.projectName" value="Astronomy" />
+    <property name="sonar.projectVersion" value="1.0" />
+    <property name="sonar.language" value="java" />
+    <property name="sonar.sources" value="src" />
+    <property name="sonar.tests" value="test" />
+    <property name="sonar.binaries" value="build" />
+    <property name="sonar.libraries" value="lib/*.jar"/>
+    <property name="sonar.jacoco.reportPath" value="bin/jacoco.exec"/>
+    
+    <target name="test">
+        <jacoco:coverage destfile="bin/jacoco.exec">
+            <junit fork="true" forkmode="once">
+                <classpath refid="classpath"/>
+                <batchtest todir="reports">
+                    <fileset dir="test">
+                        <include name="**/*.java"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
+    </target>
+    
+    <target name="sonar" depends="test">
+        <sonar:sonar/>
+    </target>
+</project>
