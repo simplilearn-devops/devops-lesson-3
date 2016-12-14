@@ -8,11 +8,25 @@ Open the Cloud Platform Console at https://console.cloud.google.com. Go to Compu
 
 ### Step 2
 
+Download and install Maven.
+
+`cd ~/Downloads`  
+`wget http://apache.crihan.fr/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz`  
+`cd`
+`tar zxf Downloads/apache-maven-3.3.9-bin.tar.gz`  
+`ln -s apache-maven-3.3.9 maven`  
+
+### Step 3
+
 Change to the lab directory.
 
-`cd ~/devlops-lesson-3/lab-3.3`  
+`cd ~/devops-lesson-3/lab-3.3`  
 
  Take a look at the files in the directory.
+
+Get Hadoop.
+
+`wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz`  
 
  Install and configure Hadoop.
  Read and run the script which configures Hadoop.
@@ -20,7 +34,7 @@ Change to the lab directory.
 `chmod +x setup_hadoop`  
 `./setup_hadoop`  
 
-### Step 3
+### Step 4
 
 Configure the HDFS file system.  
 First format the HDFS file system.  
@@ -37,7 +51,7 @@ Start Yarn.
 
 `hadoop/sbin/start-yarn.sh`  
 
-### Step 4
+### Step 5
 
 Create a home directory on HDFS for your user.  
 
@@ -54,20 +68,20 @@ Verify that the input directory was copied.
 `hadoop/bin/hdfs dfs -ls`  
 `hadoop/bin/hdfs dfs -ls input`  
 
-### Step 5
+### Step 6
 
 Check out the code in the src directory and the file in the input directory.
 The code will count the number of occurences of each word in the input.
 
 Build the code.
 
-`mvn package`  
+`~/maven/bin/mvn package`  
 
 See what got created.  
 
 `ls -l target`  
 
-### Step 6
+### Step 7
 
 Run the map-reduce code.  
 
@@ -89,3 +103,4 @@ Finally cleanup
 `chmod +x cleanup`  
 `./cleanup`  
 
+Disconnect from the SSH session and stop your virtual machine.
