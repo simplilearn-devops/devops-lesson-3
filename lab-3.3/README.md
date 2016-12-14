@@ -12,7 +12,7 @@ Download and install Maven.
 
 `cd ~/Downloads`  
 `wget http://apache.crihan.fr/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz`  
-`cd`
+`cd`  
 `tar zxf Downloads/apache-maven-3.3.9-bin.tar.gz`  
 `ln -s apache-maven-3.3.9 maven`  
 
