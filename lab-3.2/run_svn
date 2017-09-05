@@ -1,0 +1,4 @@
+#! /bin/bash
+svnserve -d -r /opt/SVN
+tail -f /dev/null
+

@@ -1,83 +1,66 @@
-# DevOps Lab 3.3 Hadoop
+# Exercise 6.3 Using Git
 
-Set up Hadoop and run a map reduce job.
+In this exercise we will install a Git server in a Docker container
+and use Git commands.
 
 ### Step 1
 
-Open the Cloud Platform Console at https://console.cloud.google.com. Go to Compute Engine and VM Instances. Start the VM if it isn’t running and connect using SSH.
+Connect to the Google Compute Engine virtual machine.
 
 ### Step 2
 
-Change to the lab directory.  
-`cd ~/devops-lesson-3/lab-3.3`  
-
-Take a look at the files in the directory.
-
-Get Hadoop.  
-`wget http://apache.mirrors.ovh.net/ftp.apache.org/dist/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz`  
-
- Install and configure Hadoop.
- Read and run the script which configures Hadoop.  
-`chmod +x setup_hadoop`  
-`./setup_hadoop`  
+Change to the exercise directory and ensure it is up to date.  
+`cd`  
+`cd devops-lesson-6`  
+`git pull`  
+`cd lab-6.3`  
 
 ### Step 3
 
-Configure the HDFS file system.  
-First format the HDFS file system.  
-It will generate a lot of output.  
-`hadoop/bin/hdfs namenode -format`  
+Copy the SSH keys and clean the known hosts file.    
+`cp ~/.ssh/id_rsa.pub authorized_keys`  
+`rm -f ~/.ssh/known_hosts`  
 
-Start the name node - it will generate output and some warnings.  
-The warnings can be safely ignored.  
-`hadoop/sbin/start-dfs.sh`  
+Check out the Dockerfile.  
+`cat Dockerfile`  
 
-Start Yarn.  
-`hadoop/sbin/start-yarn.sh`  
+Build the Alpine Linux image.  
+`docker build -t git .`  
+`docker images`  
 
 ### Step 4
 
-Create a home directory on HDFS for your user.  
-`hadoop/bin/hdfs dfs -mkdir /user`  
-`hadoop/bin/hdfs dfs -mkdir /user/student`  
-
-Check out the contents on the input directory.  
-Now copy the input directory into HDFS.  
-`hadoop/bin/hdfs dfs -put input`  
-
-Verify that the input directory was copied.  
-`hadoop/bin/hdfs dfs -ls`  
-`hadoop/bin/hdfs dfs -ls input`  
+Run the container.  
+`docker run -d -p 2022:22 --name git git`  
+`docker ps`  
 
 ### Step 5
 
-Check out the code in the src directory and the file in the input directory.
-The code will count the number of occurrences of each word in the input.  
-`find src input`
+Clone the git repo. Ignore the warning about the repo being empty. It is.  
+`git clone ssh://git@localhost:2022/home/git/project.git`  
+`cd project`  
+`ls -la`  
 
-Build the code.  
-`mvn package`  
+Add your user and email address.  
+`git config user.name student`  
+`git config user.email student@$(uname -n)`  
 
-See what got created.  
-`find target`  
+Add a new file. See how the status changes.  
+`eco "message 1" > message1.txt`  
+`git status`  
+`git add *`  
+`git status`  
+`git commit -m "added message"`  
+`git status`  
+`git push`  
+`git log message1.txt`  
+
+Try some other Git commands.
 
 ### Step 6
 
-Run the map-reduce code.  
-`hadoop/bin/hadoop jar target/Hadoop-1.0.jar hadoop.WordCount`  
+Tidy up by deleting the container and image and other files which can cause problems later.  
+`docker rm -f git`  
+`docker rmi git`  
+`rm -rf project ~/.ssh/known_hosts`  
 
-See what got created.  
-`hadoop/bin/hdfs dfs -ls`  
-`hadoop/bin/hdfs dfs -ls output`  
-
-See the results - each word and how many times it occurs in the input.
-
-`hadoop/bin/hdfs dfs -cat output/part-r-00000`  
-
-### Step 7
-
-Finally cleanup.  
-`chmod +x cleanup`  
-`./cleanup`  
-
-Disconnect from the SSH session and stop your virtual machine.

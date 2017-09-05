@@ -1,174 +1,70 @@
-# Exercise 3.1 - Relational Database
+# Exercise 6.1 Ticketing
 
-Create a relational database container and access the database.
+We are going to install the open source ticketing system JTrac into a docker container and use it.
 
 ### Step 1
 
-Open the Cloud Platform Console at https://console.cloud.google.com. Go to Compute Engine and VM Instances.
-Start the VM if it isn’t running and connect using SSH.
+Connect to the Google Compute engine virtual machine.
+
+We need to enable port 8080 in the firewall.  
+Go to the triple bar icon at the top left and select Networking. Then select Firewall Rules.
+
+Select Create Firewall Rule.
+Fill in the form:
+Name: default-allow-http-8080
+Source IP: 0.0.0.0/0
+Allow protocols and ports: tcp:8080
+Hit Create
 
 ### Step 2
 
-Clone the repository for lesson 3 and change to the lab directory.
-
-`git clone https://github.com/simplilearn-devops/devops-lesson-3.git`  
-`cd devops-lesson-3/lab-3.1`  
-
-Unpack zipped dump files
-
-`cd test_db`  
-`gunzip *gz`  
-`cd ..`  
-`chmod +x *`  
-
+Clone out the GitHub repository for this lesson.  
+`cd`  
+`git clone https://github.com/simplilearn-devops/devops-lesson-6`  
 
 ### Step 3
 
-Initialize directory structure
+Change to the lab directory.  
+`cd devops-lesson-6/lab-6.1`  
 
-Carry out the following steps to set up the directory for the lab.
+Check out the Dockerfile.  
+`cat Dockerfile`  
 
-Create a Docker data volume to hold the database.
-
-`docker volume create --name mysql_data`  
-
-Confirm that the data volume was created.
-
-`docker volume ls`  
-
-List the contents of the directory 'test_db' and notice that it contains sample data for this exercise.
-
-`ls -l test_db`  
-
-Pull down the MySQL image for release 5.7 from Docker Hub.
-
-`docker pull mysql:5.7` 
-
-Examine the script that will run and create the student database structure.
-
-`cat runserver_first`  
-
-Run the script to create a container with MySQL running and create the database.
-
-`./runserver_first`  
-
-You will need to monitor the logs to see when MySQL has completed creating
-the student database and is waiting for connections. This may take several minutes
-to complete.  
-`docker logs mysql`  
-
-When you see the following in the logs you may continue. Run the command until you see.  
-`mysqld: ready for connections.`  
-
-Run the script to run MySQL in a container and mount the data volume.  
-`./runserver`  
-
-Examine the logs from MySQL and wait for it to be ready to accept connections.  
-`docker logs mysql`  
-
-Find the IP address of the server.  
-`docker inspect mysql`  
+Build the Docker image.  
+`docker build -t jtrac .`  
+`docker images`  
 
 ### Step 4
 
-Load data into the student database
+Run the container.  
+`docker run -d --name jtrac -p 8080:80 jtrac`  
+`docker ps`  
 
-Examine the script that will run the MySQL client. Notice that we are using the same image.  
-`cat runclient`  
+Find the external IP address of your VM.  
+In a browser on your local machine enter the URL x.x.x.x:8080/jtrac replacing
+x.x.x.x with your external IP address.
 
-Run the MySQL client container.  
-`./runclient`  
-
-You will be placed inside the client container running the Bash command shell.  
-You can now type commands to use the database. You may need to change the IP address to that of the server.  
-`mysql -h 172.17.0.2 -u student -p student`  
-
-You will be prompted for the password. Enter 'student' as the password  
-`Enter password:`  
-
-When you connect you will see the MySQL client prompt  
-`mysql>`  
-
-At the prompt read in the definition for the employee information
-Be patient! this will take several minutes to complete  
-`mysql> source /data/employees.sql;`  
+You should see the Jtrac home page.  
+Log in as admin with passord admin.
 
 ### Step 5
 
-Examine the database tables in the database by selecting the first 10 rows from each
+Select `Options`.  
+Select `Manage Spaces`.  
+Select `Create new space`.  
+Give the space a `Display Name`, `Space Key` and `Description` and hit `Next`.  
+The `Space Key` must be only upper case letters.  
+Select `Next` and then `Save`.  
+Hit `Allocate` to add the admin user to the space.  
+Create a new user and allocate it to the space.  
 
-`mysql> show tables;`  
+Create a few issues. Try out features on the application. It should be fairly intuative.
+Check out this Web page for more information `http://jtrac.info/doc/html/features.html#features-dashboard`  
 
-Get the first 10 records from the current employee department table.
+### Step 6
 
-`mysql> select * from current_dept_emp limit 10;`  
+Tidy up.  
+`docker stop jtrac`  
 
-Write queries to observe the output to gain some familiarity with the data
+If you choose to remove the container you will lose any data. We won't be using this tool again.
 
-Get the first 10 departments.
-
-`mysql> select * from departments limit 10;`  
-
-Get the first 10 records from the employee department table.
-
-`mysql> select * from dept_emp limit 10;`  
-
-
-Get the first 10 records from the employee date table.
-
-`mysql> select * from dept_emp_latest_date limit 10;`  
-
-
-Get the first 10 records from the department manager table.
-
-`mysql> select * from dept_manager limit 10;`  
-
-
-Get the first 10 records from the employee table.
-
-`mysql> select * from employees limit 10;`  
-
-1Get the first 10 records from the salary table.
-
-`mysql> select * from salaries limit 10;`  
-
-Get the first 10 records from the titles table.
-
-`mysql> select * from titles limit 10;`  
-
-
-### Step 4
-
-Answer business questions with SQL queries
-
-Q1. Who is the oldest employee and what is their age?
-
-`SELECT first_name, last_name, TIMESTAMPDIFF(YEAR,birth_date,CURDATE()) AS age FROM employees ORDER BY birth_date DESC limit 1;`  
-
-Q2. Which department has the most employees?
-
-`select dept_no, count(*) AS number  from dept_emp WHERE to_date='9999-01-01' group by dept_no order by number DESC limit 1;`  
-
-Q3. Which employee has the highest salary and how much is it
-
-`SELECT t1.first_name, t1.last_name, t2.salary FROM employees AS t1 INNER JOIN salaries as t2 on t1.emp_no = t2.emp_no ORDER BY salary DESC limit 1;`  
-
-
-Q4. Which employee manages the smallest department and how many employees are in that department?
-
-See if you can answer this one yourself.
-
-### Step 5
- 
-Clean up after the lab
-
- Exit from the MySQL client  
-`mysql> quit;`  
-
- Exit from the client container  
- `exit`  
-
- Clean up the lab artifacts  
- `./cleanup`  
-
- 

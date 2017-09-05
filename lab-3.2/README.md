@@ -1,72 +1,81 @@
-# Devops Lab 3.2 Docker Volumes
+# Exercise 6.2 Subversion
 
-Working with Docker volumes.
+In this exercise we will install Subversion into a Docker image and
+use the image as both a client and a server.
 
 ### Step 1
 
-Open the Cloud Platform Console at https://console.cloud.google.com. Go to Compute Engine and VM Instances. Start the VM if it isn’t running and connect using SSH.
-
+Connect to the Google Compute Engine virtual machine.
 
 ### Step 2
 
-Create a Docker volume to which you will add persistent data
+Change to the directory for this exercise.  
+`cd`  
+`cd devops-lesson-6/lab-6.2`  
 
-`docker volume create --name mydata`  
+Check out the Dockerfile.  
+`cat Dockerfile`  
+
+Build the image.  
+`docker build -t svn .`  
+` docker images`  
 
 ### Step 3
 
-Create a Docker container, attach the data volume and add persistent data
+Create two directories to work with.  
+`mkdir SVN Work`  
 
-Pull a light weight Alpine distribution image
+Start a client container.  
+`docker run -it --rm -v $PWD/SVN:/opt/SVN svn /bin/bash`  
 
-`docker pull alpine`  
+Create a repository. It is basically a database, configuration and scripts.   
+`mkdir /opt/SVN/monitoring`  
+`svnadmin create /opt/SVN/monitoring`  
+`ls -l /opt/SVN/monitoring`  
 
-Create a container from Alpine and mount the volume mydata to /mnt
+Edit the server configuration file and give anonymous users write access by adding the line `anon-access = write` to the `[general]` section. You save and quit `vi` by typing `:wq`.  
+`vi /opt/SVN/monitoring/conf/svnserve.conf`  
 
-`docker run -ti --name client -v mydata:/mnt alpine /bin/sh`  
+Edit the password file in the repositor and add the entry `root = rootpw` to the end of the file.  
+`vi /opt/SVN/monitoring/conf/passwd`  
 
-Go to the /mnt directory and touch (create) two files and verify the exist
-
-`cd /mnt`  
-`touch foo.txt`  
-`touch bar.txt`  
-`ls`  
-
-Exit the container
-
-`exit`  
-
-Verfiy that the container exists and is stopped
-
-`docker ps -a`  
-
-Delete the container and then verify it is gone
-
-`docker rm client`  
-`docker ps -a`  
-
-Run a new container and mount the volume mydata to /mnt again
-
-`docker run --rm -ti -v mydata:/mnt alpine /bin/sh`  
-
-Go to the /mnt directory and observer the files still exist
-
-`cd /mnt`  
-`ls`  
-
-Exit the container
-
-`exit`  
-
-Verify that the volume still exists
-
-`docker volume ls`  
+Exit the container with control-D.  
 
 ### Step 4
 
-Clean up artifacts
+Run the server and find its IP address.  
+`docker run -d --name svn -v $PWD/SVN:/opt/SVN -p 3690:3690 svn`  
+`docker ps`  
+`docker inspect svn`  
 
-`docker rm -f $(docker ps -aq)`  
-`docker rmi $(docker images -q)`  
-`docker volume rm $(docker volume ls -q)`  
+### Step 5
+
+Run the client.  
+`docker run -it --rm -v $PWD/Work:/opt/Work svn /bin/bash`  
+
+Check out the repository.  
+`cd /opt/Work`  
+`svn co svn://172.17.0.2/monitoring`  
+`ls -la`  
+`cd monitoring`  
+
+### Step 6
+
+Try out some Subversion commands.  
+`echo "Message 1 " > message1.txt`  
+`svn status`  
+`svn add message1.txt`  
+`svn status`  
+`ls -la`  
+`svn log message1.txt`  
+
+Try other commands and adding other files.
+
+### Step 7
+
+Exit the container with control-D.
+
+Delete the server container.  
+`docker rm -f svn`  
+
 
