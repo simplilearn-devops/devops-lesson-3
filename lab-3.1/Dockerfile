@@ -2,8 +2,8 @@ FROM centos:latest
 RUN yum install -y wget
 RUN yum install -y zip
 RUN cd /tmp && wget -q --no-check-certificate --no-cookies \
-   --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-   http://download.oracle.com/otn-pub/java/jdk/8u144-b01/090f390dda5b47b9b721c7dfaa008135/jdk-8u144-linux-x64.rpm
+   --header "Cookie: oraclelicense=accept-securebackup-cookie" \ 
+http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.rpm
 RUN rpm -i /tmp/jdk*linux-x64.rpm
 ENV JAVA_HOME=/usr/java/latest
 RUN cd /tmp && wget https://sourceforge.net/projects/j-trac/files/jtrac/2.1.0/jtrac-2.1.0.zip
